@@ -1,11 +1,18 @@
 FROM ubuntu:latest
 
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV FLASK_APP flaskr
+ENV FLASK_ENV development
+
 RUN apt update
 RUN apt install python3 python3-pip -y
-RUN pip3 install flask
 
 RUN mkdir /flask-tutorial
 COPY . /flask-tutorial
 
 WORKDIR /flask-tutorial
-CMD ["sh", "run.sh"]
+RUN python3 setup.py install
+RUN flask init-db
+
+CMD ["flask", "run", "--host=0.0.0.0"]
